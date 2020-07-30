@@ -1,0 +1,28 @@
+.app {
+  width: 400px;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 3px solid aqua;
+  padding: 15px;
+}
+.main-buttons {
+  margin-top: 15px;
+  border-radius: 10px;
+  padding: 15px;
+  border: 3px solid aqua;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-buttons.settings {
+  display: block;
+  text-align: center;
+}
+
+.settings-values {
+  border: aqua 3px solid;
+  border-radius: 10px;
+  padding: 15px;
+
+}
+

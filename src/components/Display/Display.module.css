@@ -1,0 +1,23 @@
+.display {
+    background-color: aqua;
+    min-height: 150px;
+    font-size: 80px;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.red {
+    color: red;
+    font-weight: 700;
+}
+
+.error {
+    font-size: 30px;
+}
+
+
