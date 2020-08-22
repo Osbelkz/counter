@@ -15,7 +15,7 @@ export function Display(props: DisplayType) {
             {props.editMode
                 ? props.hasError
                     ? <span className={`${classes.error} ${classes.red}`}>Invalid value</span>
-                    : <span className={classes.error}>edit mode press SET to set params</span>
+                    : <span className={classes.error}>enter values and press 'set'</span>
 
                 : <span>{props.displayValue}</span>}
         </div>

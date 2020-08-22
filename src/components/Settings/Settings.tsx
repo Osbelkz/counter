@@ -1,6 +1,7 @@
 import {SetValue} from "../SetValue/SetValue";
 import {Button} from "../Button/Button";
 import React, {useState} from "react";
+import {restoreState, saveState} from "../../App";
 
 
 type PropsType = {
@@ -13,8 +14,11 @@ type PropsType = {
 
 export function Settings(props: PropsType) {
 
-    let [maxValue, setMaxValue] = useState<number>(5)
-    let [minValue, setMinValue] = useState<number>(0)
+    let [maxValue, setMaxValue] = useState<number>(restoreState("maxNum", 5))
+    let [minValue, setMinValue] = useState<number>(restoreState("minNum", 0))
+
+    saveState('maxNum', maxValue)
+    saveState('minNum', minValue)
 
     function setMaxValueHandler(newValue: number) {
         setMaxValue(newValue)
@@ -30,7 +34,7 @@ export function Settings(props: PropsType) {
         props.setThresholdValues(minValue, maxValue)
     }
 
-    if (maxValue < minValue) {
+    if (maxValue <= minValue) {
         if (!props.currentErrorValue) props.setError(true)
     } else {
         if (props.currentErrorValue) props.setError(false)
@@ -42,15 +46,15 @@ export function Settings(props: PropsType) {
                 <SetValue setValue={maxValue}
                           setTitle={'max value'}
                           onChange={setMaxValueHandler}
-                          error={minValue > maxValue}/>
+                          error={minValue >= maxValue}/>
                 <SetValue setValue={minValue}
                           setTitle={'start value'}
                           onChange={setMinValueHandler}
-                          error={minValue > maxValue}/>
+                          error={minValue >= maxValue}/>
             </div>
             <div className={'main-buttons settings'}>
                 <Button btnName={"set"}
-                        disabled={maxValue < minValue}
+                        disabled={maxValue <= minValue || !props.currentEditModeValue}
                         onClick={setThresholdValuesHandler}/>
             </div>
         </div>

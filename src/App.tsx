@@ -12,15 +12,30 @@ export type CounterType = {
     setMode: boolean
 }
 
-function App() {
+export function saveState<T> (key: string, state: T) {
+    const stateAsString = JSON.stringify(state);
+    localStorage.setItem(key, stateAsString)
+}
 
-    const [counter, setCounter] = useState<CounterType>({
+export function restoreState<T>(key: string, defaultState: T) {
+    const stateAsString = localStorage.getItem(key);
+    if (stateAsString !== null) defaultState = JSON.parse(stateAsString);
+    return defaultState;
+}
+
+
+export function App() {
+
+    let defaultState = {
         startValue: 0,
         maxValue: 5,
         currentValue: 0,
         hasError: false,
         setMode: false,
-    })
+    }
+
+    const [counter, setCounter] = useState<CounterType>(restoreState('counter', defaultState))
+    saveState("counter", counter)
 
     function increaseCounter() {
         setCounter({...counter, currentValue: counter.currentValue + 1})
@@ -71,5 +86,3 @@ function App() {
 
     );
 }
-
-export default App;
