@@ -1,22 +1,23 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
 import {Display} from "./components/Display/Display";
 import {Button} from "./components/Button/Button";
 import {Settings} from "./components/Settings/Settings";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from './state/store';
+import {
+    enableEditModeAC,
+    increaseCounterAC,
+    resetCounterAC,
+    setErrorAC,
+    setSelectedValuesAC, StateType
+} from "./state/counter-reducer";
 
-export type CounterType = {
-    startValue: number
-    maxValue: number
-    currentValue: number
-    hasError: boolean
-    setMode: boolean
-}
 
-export function saveState<T> (key: string, state: T) {
+export function saveState<T>(key: string, state: T) {
     const stateAsString = JSON.stringify(state);
     localStorage.setItem(key, stateAsString)
 }
-
 export function restoreState<T>(key: string, defaultState: T) {
     const stateAsString = localStorage.getItem(key);
     if (stateAsString !== null) defaultState = JSON.parse(stateAsString);
@@ -25,37 +26,28 @@ export function restoreState<T>(key: string, defaultState: T) {
 
 
 export function App() {
+    /*
+        const [counter, setCounter] = useState<CounterType>()
+        restoreState('counter', defaultState)*/
+    let counter = useSelector<AppRootStateType, StateType>(state => state.couter)
+    let dispatch = useDispatch()
 
-    let defaultState = {
-        startValue: 0,
-        maxValue: 5,
-        currentValue: 0,
-        hasError: false,
-        setMode: false,
-    }
-
-    const [counter, setCounter] = useState<CounterType>(restoreState('counter', defaultState))
     saveState("counter", counter)
 
     function increaseCounter() {
-        setCounter({...counter, currentValue: counter.currentValue + 1})
+        dispatch(increaseCounterAC())
     }
-
     function resetCounter() {
-        setCounter({...counter, currentValue: counter.startValue})
+        dispatch(resetCounterAC())
     }
-
     function setThresholdValues(newStartValue: number, newMaxValue: number) {
-        setCounter({...counter, maxValue: newMaxValue, startValue: newStartValue, setMode: false, currentValue: newStartValue})
-
+        dispatch(setSelectedValuesAC(newStartValue, newMaxValue))
     }
-
     function setError(value: boolean) {
-        setCounter({...counter, hasError: value})
+        dispatch(setErrorAC(value))
     }
-
-    function editMode(value: boolean) {
-        setCounter({...counter, setMode: value})
+    function enableEditMode(value: boolean) {
+        dispatch(enableEditModeAC(value))
     }
 
     console.log(counter)
@@ -77,7 +69,7 @@ export function App() {
             </div>
             <Settings
                 setThresholdValues={setThresholdValues}
-                enableEditMode={editMode}
+                enableEditMode={enableEditMode}
                 setError={setError}
                 currentErrorValue={counter.hasError}
                 currentEditModeValue={counter.setMode}
